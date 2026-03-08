@@ -4,16 +4,9 @@
 
 [`valid`](https://github.com/gorira-tatsu/valid) is a Rust-first finite-state verification language and toolchain for modeling business rules, workflows, contracts, and other stateful requirements in a machine-checkable form.
 
-Instead of being only a place to store specification documents, this repository shows how to turn requirements into verifiable artifacts.
+The current demo target is a simple bulletin board application under `bss`.
 
-- Organize specification documents by feature area
-- Translate requirements into `valid` models with states, actions, and business rules
-- Define expected properties explicitly and check them automatically
-- Use coverage and explain-style diagnostics to find unreachable branches and missing constraints
-
-The current demo target is a simple bulletin board application under the `bss` directory.
-
-## What This Repository Shows
+## What This Demo Covers
 
 - How to go beyond screen-level specs and turn requirements into verifiable constraints
 - How to split a problem into `state`, `action`, and `property` in [`valid`](https://github.com/gorira-tatsu/valid)
@@ -36,7 +29,7 @@ The current demo target is a simple bulletin board application under the `bss` d
 3. Run `inspect`, `check`, and `coverage` to see how the specification becomes machine-readable
 4. Review cross-cutting models such as `board-flow` to understand how end-to-end consistency is expressed
 
-## Current Demo Scope
+## Demo Scope
 
 `bss` currently contains 14 models.
 
@@ -54,18 +47,3 @@ The current demo target is a simple bulletin board application under the `bss` d
 - Submission discipline
 - Message contract
 - Cross-cutting board flow
-
-This structure makes it possible to verify more than just happy paths.
-
-- Consistency of HTML escaping and error code behavior
-- Invisibility of deleted posts
-- Ordering and excerpt rules
-- Contracts for UI messages and error-message placement
-- Consistency between list and detail views
-- Recovery behavior after retry
-
-## Running The Demo
-
-`bss` depends on [`valid`](https://github.com/gorira-tatsu/valid) through a pinned GitHub revision. After cloning this repository, you should be able to resolve dependencies without placing a local `../../valid` checkout next to it, as long as you have a Rust toolchain.
-
-This repository itself still does not define a license. Before treating it as a polished public sample, adding a license file would be a good next step.

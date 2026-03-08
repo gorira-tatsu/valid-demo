@@ -4,16 +4,6 @@ This directory is a demo that formalizes the requirements of a simple bulletin b
 
 [`valid`](https://github.com/gorira-tatsu/valid) is a Rust-first finite-state verification language and toolchain for expressing requirements as states, actions, transitions, and properties that can be checked mechanically.
 
-## Purpose
-
-This demo focuses on a stage earlier than implementation verification. The goal is to show what can be checked mechanically during requirements definition itself, and to make concrete what kinds of requirements work `valid` is useful for.
-
-More concretely, this sample answers questions such as:
-
-- How should a requirement set be decomposed into `state`, `action`, and `property`?
-- Can screen behavior, API contracts, business rules, and UX constraints be handled on the same verification foundation?
-- Can the model cover not only happy paths, but also validation failures, boundary conditions, invisibility after deletion, double-submit prevention, and message consistency?
-
 ## Recommended Reading Order
 
 1. [`docs/rdd/README.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/README.md)
@@ -55,8 +45,6 @@ There are 14 exported models.
   Cross-feature consistency across list, detail, edit, delete, and comment flows
 
 ## What `valid` Makes Visible
-
-From the requirements alone, this demo lets you check at least the following:
 
 - `models`
   See which requirement areas were separated into independent models
@@ -110,34 +98,11 @@ Run the full verification script:
 ./scripts/verify_valid_registry.sh
 ```
 
-## Current Verification Status
+## Known Issue
 
-As of March 8, 2026, `./scripts/verify_valid_registry.sh` does not pass completely.
+As of March 8, 2026, `./scripts/verify_valid_registry.sh` does not fully pass.
 
 - `board-post-list`
 - property: `P_LIST_EMPTY_STATE_MATCHES_VISIBLE_COUNT`
 
 The reachable counterexample shows a page-overflow case where `visible_posts == 0` while `empty_state_visible == false`. That means the boundary between "empty list state" and "page overflow state" is still underspecified.
-
-For a public demo repository, this is best treated as a known specification issue rather than hidden. The README states it explicitly so readers do not mistake the demo for a fully closed verification set.
-
-## Suggested Focus Areas
-
-These parts are especially worth reviewing:
-
-- `board-common-spec`
-  How small shared rules become invariants
-- `board-list-rendering`
-  How UI rendering rules become verifiable constraints instead of informal notes
-- `board-retry-ux`
-  How UX constraints can be modeled explicitly
-- `board-message-contract`
-  How messages can be treated as contracts tied to state and result
-- `board-flow`
-  Cross-feature consistency beyond individual screen-level models
-
-## Notes
-
-This demo pins [`valid`](https://github.com/gorira-tatsu/valid) to a specific GitHub commit. That improves reproducibility, but the first build still requires network access.
-
-Also, this repository still has no license file. For a public repository, adding one would be the next sensible cleanup step.

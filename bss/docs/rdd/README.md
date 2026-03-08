@@ -2,8 +2,7 @@
 
 ## Overview
 - This directory contains the requirements and specification documents for a simple bulletin board application.
-- The target is an MVP (Minimum Viable Product) that first establishes the core post and reading experience.
-- The implementation approach and tech stack are intentionally left open. These documents focus on functional requirements, business rules, and screen/API behavior.
+- The target is an MVP focused on core posting and reading behavior.
 
 ## Documents
 - [00_assumptions_and_scope](./00_assumptions_and_scope.md)

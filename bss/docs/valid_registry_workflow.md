@@ -2,7 +2,7 @@
 
 ## Goal
 - Treat `valid/board_rdd_registry.rs` as the source of truth and make contract drift checks and property verification reproducible through the `valid-registry` MCP flow.
-- Reduce common operational mistakes such as using a stale built binary or not knowing which model or property to inspect.
+- Avoid stale binaries and unclear model/property selection.
 
 ## Assumptions
 - The registry binary is `target/debug/bss-valid-models`.
