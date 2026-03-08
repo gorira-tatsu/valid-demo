@@ -1,6 +1,8 @@
 # valid-demo
 
-`valid-demo` is a demo repository for understanding what becomes possible when you use the formal verification language `valid` during requirements definition.
+`valid-demo` is a demo repository for showing what becomes possible, and what kinds of requirements work you may want to do, when you use the formal verification language [`valid`](https://github.com/gorira-tatsu/valid) during requirements definition.
+
+[`valid`](https://github.com/gorira-tatsu/valid) is a Rust-first finite-state verification language and toolchain for modeling business rules, workflows, contracts, and other stateful requirements in a machine-checkable form.
 
 Instead of being only a place to store specification documents, this repository shows how to turn requirements into verifiable artifacts.
 
@@ -14,7 +16,7 @@ The current demo target is a simple bulletin board application under the `bss` d
 ## What This Repository Shows
 
 - How to go beyond screen-level specs and turn requirements into verifiable constraints
-- How to split a problem into `state`, `action`, and `property` in `valid`
+- How to split a problem into `state`, `action`, and `property` in [`valid`](https://github.com/gorira-tatsu/valid)
 - How to verify cross-feature flows such as list -> create -> detail -> edit/delete -> comment, not just isolated screens
 - How to operate contract drift checks, property verification, and coverage review in a practical order
 
@@ -64,6 +66,6 @@ This structure makes it possible to verify more than just happy paths.
 
 ## Running The Demo
 
-`bss` depends on `valid` through a pinned GitHub revision. After cloning this repository, you should be able to resolve dependencies without placing a local `../../valid` checkout next to it, as long as you have a Rust toolchain.
+`bss` depends on [`valid`](https://github.com/gorira-tatsu/valid) through a pinned GitHub revision. After cloning this repository, you should be able to resolve dependencies without placing a local `../../valid` checkout next to it, as long as you have a Rust toolchain.
 
 This repository itself still does not define a license. Before treating it as a polished public sample, adding a license file would be a good next step.

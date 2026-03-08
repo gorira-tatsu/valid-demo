@@ -1,10 +1,12 @@
 # BSS valid demo
 
-This directory is a demo that formalizes the requirements of a simple bulletin board application with `valid` and shows what kinds of guarantees can be checked.
+This directory is a demo that formalizes the requirements of a simple bulletin board application with [`valid`](https://github.com/gorira-tatsu/valid) and shows what kinds of guarantees can be checked.
+
+[`valid`](https://github.com/gorira-tatsu/valid) is a Rust-first finite-state verification language and toolchain for expressing requirements as states, actions, transitions, and properties that can be checked mechanically.
 
 ## Purpose
 
-This demo focuses on a stage earlier than implementation verification. The goal is to show what can be checked mechanically during requirements definition itself.
+This demo focuses on a stage earlier than implementation verification. The goal is to show what can be checked mechanically during requirements definition itself, and to make concrete what kinds of requirements work `valid` is useful for.
 
 More concretely, this sample answers questions such as:
 
@@ -136,6 +138,6 @@ These parts are especially worth reviewing:
 
 ## Notes
 
-This demo pins `valid` to a specific GitHub commit. That improves reproducibility, but the first build still requires network access.
+This demo pins [`valid`](https://github.com/gorira-tatsu/valid) to a specific GitHub commit. That improves reproducibility, but the first build still requires network access.
 
 Also, this repository still has no license file. For a public repository, adding one would be the next sensible cleanup step.
