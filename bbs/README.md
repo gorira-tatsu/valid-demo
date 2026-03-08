@@ -10,6 +10,7 @@ This directory is a demo that formalizes the requirements of a simple bulletin b
 2. [`docs/rdd/07_valid_models.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/rdd/07_valid_models.md)
 3. [`docs/rdd/08_bbs_acceptance_requirements.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/rdd/08_bbs_acceptance_requirements.md)
 4. [`docs/valid_registry_workflow.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/valid_registry_workflow.md)
+5. [`docs/demo_walkthrough.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/demo_walkthrough.md)
 
 ## Model Inventory
 
@@ -98,6 +99,86 @@ Run the full verification script:
 ./scripts/verify_valid_registry.sh
 ```
 
+## Output Samples
+
+### `inspect`
+
+```json
+{
+  "status": "ok",
+  "model_id": "CommonSpecModel",
+  "state_fields": [
+    "title_len",
+    "body_len",
+    "edit_key_len",
+    "comment_body_len",
+    "author_defaulted",
+    "comment_author_defaulted",
+    "html_escaped",
+    "resource_visible",
+    "outcome"
+  ],
+  "properties": [
+    "P_COMMON_HTML_IS_ALWAYS_ESCAPED",
+    "P_COMMON_BAD_REQUEST_HIDES_INVALID_RESOURCE"
+  ]
+}
+```
+
+Read it as:
+
+- `state_fields`: what the requirement model actually keeps as state
+- `properties`: what can be checked directly
+- `model_id`: the underlying exported model
+
+### `check`
+
+```json
+{
+  "status": "PASS",
+  "property_result": {
+    "property_id": "P_COMMON_HTML_IS_ALWAYS_ESCAPED",
+    "status": "PASS",
+    "summary": "no violating state found in the reachable state space"
+  },
+  "review_summary": {
+    "headline": "PASS P_COMMON_HTML_IS_ALWAYS_ESCAPED for board-common-spec"
+  }
+}
+```
+
+Read it as:
+
+- `status`: overall result for this run
+- `property_result.status`: whether the property held
+- `summary`: short reason
+- `review_summary.headline`: one-line reviewer-facing result
+
+### `coverage`
+
+```json
+{
+  "summary": {
+    "transition_coverage_percent": 100,
+    "decision_coverage_percent": 94,
+    "guard_full_coverage_percent": 68
+  },
+  "gate": {
+    "status": "warn",
+    "reasons": [
+      "guard_full_coverage below threshold"
+    ]
+  }
+}
+```
+
+Read it as:
+
+- `transition_coverage_percent`: were the declared transitions exercised
+- `decision_coverage_percent`: were guard/update decisions exercised
+- `guard_full_coverage_percent`: did each guard see both true and false
+- `gate.status`: whether the current policy considers coverage sufficient
+
 ## Known Issue
 
 As of March 8, 2026, `./scripts/verify_valid_registry.sh` does not fully pass.
@@ -106,3 +187,11 @@ As of March 8, 2026, `./scripts/verify_valid_registry.sh` does not fully pass.
 - property: `P_LIST_EMPTY_STATE_MATCHES_VISIBLE_COUNT`
 
 The reachable counterexample shows a page-overflow case where `visible_posts == 0` while `empty_state_visible == false`. That means the boundary between "empty list state" and "page overflow state" is still underspecified.
+
+The useful part is not only that the property fails. The useful part is what the failure teaches:
+
+- the current requirement sentence is too coarse
+- the model distinguishes between "no posts exist" and "the requested page overflowed"
+- the property does not yet distinguish those cases
+
+In other words, the failure is evidence of a requirements gap, not just a model bug.
