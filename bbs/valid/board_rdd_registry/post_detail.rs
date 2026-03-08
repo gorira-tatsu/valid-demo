@@ -1,13 +1,13 @@
 /*
-対応する要件定義:
-- docs/rdd/00_前提とスコープ.md
-- docs/rdd/04_投稿詳細機能.md
+Requirements covered:
+- docs/rdd/00_assumptions_and_scope.md
+- docs/rdd/04_post_detail.md
 
-この model が担うこと:
-- 未削除投稿のみ詳細表示すること
-- コメント空状態と古い順表示
-- 更新日時表示
-- 取得失敗からの回復後に整合した詳細表示へ戻ること
+This model covers:
+- detail visibility only for non-deleted posts
+- comment empty state and oldest-first ordering
+- updated-at visibility
+- return to a consistent detail view after recovery from load failure
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct PostDetailState {

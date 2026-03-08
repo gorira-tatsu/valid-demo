@@ -1,11 +1,11 @@
 /*
-対応する要件定義:
-- docs/rdd/01_共通仕様.md
-- docs/rdd/08_BBS成立要件.md
+Requirements covered:
+- docs/rdd/01_common_specification.md
+- docs/rdd/08_bbs_acceptance_requirements.md
 
-この model が担うこと:
-- 一覧失敗時は TopBanner、フォーム失敗時は BelowForm に出すこと
-- ErrorShown -> Retrying -> Recovered の retry 回復遷移
+This model covers:
+- using `TopBanner` for list failures and `BelowForm` for form failures
+- retry recovery as `ErrorShown -> Retrying -> Recovered`
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct RetryUxState {

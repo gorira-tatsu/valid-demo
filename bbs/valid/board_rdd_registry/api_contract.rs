@@ -1,11 +1,11 @@
 /*
-対応する要件定義:
-- docs/rdd/01_共通仕様.md
+Requirements covered:
+- docs/rdd/01_common_specification.md
 
-この model が担うこと:
-- `GET /posts` と `POST /posts` の JSON 応答構造
-- API 応答が JSON であること
-- 正常系の基本フィールド契約
+This model covers:
+- JSON response structure for `GET /posts` and `POST /posts`
+- the rule that API responses are JSON
+- base field contracts for successful responses
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct ApiContractState {

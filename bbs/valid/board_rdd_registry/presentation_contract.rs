@@ -1,12 +1,12 @@
 /*
-対応する要件定義:
-- docs/rdd/01_共通仕様.md
-- docs/rdd/08_BBS成立要件.md
+Requirements covered:
+- docs/rdd/01_common_specification.md
+- docs/rdd/08_bbs_acceptance_requirements.md
 
-この model が担うこと:
-- 日時表示フォーマット
-- HTML エスケープと改行保持
-- 成功メッセージと retry 導線配置の表示契約
+This model covers:
+- datetime display format
+- HTML escaping and newline preservation
+- presentation contracts for success messages and retry-message placement
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct PresentationContractState {

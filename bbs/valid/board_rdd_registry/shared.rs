@@ -1,20 +1,20 @@
 use valid::{registry::run_registry_cli, valid_model, valid_models, ValidAction, ValidEnum, ValidState};
 
 /*
-docs/rdd を valid に落とすときの読み方
+How to read the `docs/rdd` to `valid` mapping:
 
-- 仕様文:
-  人間が読む業務ルール。長さ制限、404、削除済み非表示など。
+- specification text:
+  Human-readable business rules such as length limits, 404 behavior, and
+  invisibility after deletion.
 - valid state:
-  仕様のうち「検証したい事実」を有限状態へ圧縮したもの。
+  A finite abstraction of the facts that should be checked.
 - valid action:
-  画面操作や API 呼び出しを 1 ステップの遷移として表したもの。
+  A single-step transition representing a screen action or API call.
 - valid property:
-  仕様として常に守られてほしい不変条件。
+  An invariant that should always hold as part of the requirement.
 
-つまりこのファイル群は、仕様書をそのまま実装しているのではなく、
-仕様書の中の「壊してはいけないルール」だけを有限状態機械として
-抽出したもの。
+These files do not implement the specification directly. They extract only the
+rules that must not be broken and express them as finite-state machines.
 */
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidEnum)]

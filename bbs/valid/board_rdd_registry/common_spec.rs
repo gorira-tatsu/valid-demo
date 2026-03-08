@@ -1,13 +1,13 @@
 /*
-対応する要件定義:
-- docs/rdd/00_前提とスコープ.md
-- docs/rdd/01_共通仕様.md
+Requirements covered:
+- docs/rdd/00_assumptions_and_scope.md
+- docs/rdd/01_common_specification.md
 
-この model が担うこと:
-- 投稿/コメントの必須入力と文字数制約
-- 匿名時の `名無しさん` 補完
-- `400 / 403 / 404 / 5xx` の使い分け
-- HTML エスケープ前提
+This model covers:
+- required post/comment input and length constraints
+- anonymous-name defaulting
+- separation of `400 / 403 / 404 / 5xx` behavior
+- HTML escaping assumptions
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct CommonSpecState {

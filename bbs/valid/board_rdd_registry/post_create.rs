@@ -1,12 +1,12 @@
 /*
-対応する要件定義:
-- docs/rdd/01_共通仕様.md
-- docs/rdd/03_投稿作成機能.md
+Requirements covered:
+- docs/rdd/01_common_specification.md
+- docs/rdd/03_post_creation.md
 
-この model が担うこと:
-- 匿名投稿時の補完
-- 成功時の詳細遷移
-- 失敗時の入力保持
+This model covers:
+- anonymous post defaulting
+- navigation to detail on success
+- input preservation on failure
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct PostCreateState {

@@ -1,12 +1,12 @@
 /*
-対応する要件定義:
-- docs/rdd/00_前提とスコープ.md
-- docs/rdd/02_投稿一覧機能.md
+Requirements covered:
+- docs/rdd/00_assumptions_and_scope.md
+- docs/rdd/02_post_list.md
 
-この model が担うこと:
-- 削除済みデータを一覧に出さないこと
-- 20 件上限、空状態、詳細導線、新規投稿導線
-- `page` `limit` の境界条件
+This model covers:
+- keeping deleted data out of the list
+- the 20-item cap, empty state, detail navigation, and new-post navigation
+- `page` and `limit` boundary conditions
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct PostListState {

@@ -1,13 +1,13 @@
 /*
-対応する要件定義:
-- docs/rdd/03_投稿作成機能.md
-- docs/rdd/06_コメント機能.md
-- docs/rdd/08_BBS成立要件.md
+Requirements covered:
+- docs/rdd/03_post_creation.md
+- docs/rdd/06_comments.md
+- docs/rdd/08_bbs_acceptance_requirements.md
 
-この model が担うこと:
-- 作成/コメント送信中の多重送信防止
-- 失敗後の再送可能性
-- 回復後の通常フロー復帰
+This model covers:
+- double-submit prevention during create/comment submission
+- retryability after failure
+- return to normal flow after recovery
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct SubmissionDisciplineState {

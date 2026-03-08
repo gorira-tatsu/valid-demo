@@ -1,12 +1,12 @@
 /*
-対応する要件定義:
-- docs/rdd/02_投稿一覧機能.md
-- docs/rdd/05_投稿編集・削除機能.md
+Requirements covered:
+- docs/rdd/02_post_list.md
+- docs/rdd/05_post_edit_and_delete.md
 
-この model が担うこと:
-- 空状態文言の束縛
-- 投稿成功文言の束縛
-- 編集用キー不一致文言の束縛
+This model covers:
+- binding the empty-state message
+- binding the post-created success message
+- binding the invalid-edit-key message
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct MessageContractState {

@@ -1,11 +1,11 @@
 /*
-対応する要件定義:
-- docs/rdd/01_共通仕様.md
+Requirements covered:
+- docs/rdd/01_common_specification.md
 
-この model が担うこと:
-- `editKey` を平文永続化しないこと
-- 保存済みならハッシュ化されていること
-- 利用者入力キーを再表示前提にしない保存方針
+This model covers:
+- never persisting `editKey` in plaintext
+- requiring stored keys to be hashed
+- a storage policy that does not rely on re-displaying the user-entered key
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct EditKeyStorageState {

@@ -1,11 +1,11 @@
 /*
-対応する要件定義:
-- docs/rdd/02_投稿一覧機能.md
+Requirements covered:
+- docs/rdd/02_post_list.md
 
-この model が担うこと:
-- 新しい順 / 古い順の並び順
-- 120 文字抜粋と省略記号
-- ページネーションまたはもっと見る導線
+This model covers:
+- newest-first / oldest-first ordering
+- 120-character excerpts and ellipsis behavior
+- pagination or load-more continuation UI
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct ListRenderingState {

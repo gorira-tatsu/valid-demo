@@ -1,11 +1,12 @@
 /*
-対応する要件定義:
-- docs/rdd/08_BBS成立要件.md
+Requirements covered:
+- docs/rdd/08_bbs_acceptance_requirements.md
 
-この model が担うこと:
-- 投稿作成から一覧、詳細、更新、コメント、削除までの横断整合
-- 更新後の詳細取得失敗から retry 回復後の整合復元
-- 再取得を跨いだ `updatedAt` とコメント件数整合
+This model covers:
+- cross-feature consistency from post creation through list, detail, update,
+  comment, and delete flows
+- restoration of consistency after detail-load failure and retry on an updated post
+- `updatedAt` and comment-count consistency across reloads
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct BoardFlowState {

@@ -1,12 +1,12 @@
 /*
-対応する要件定義:
-- docs/rdd/01_共通仕様.md
-- docs/rdd/06_コメント機能.md
+Requirements covered:
+- docs/rdd/01_common_specification.md
+- docs/rdd/06_comments.md
 
-この model が担うこと:
-- 匿名コメント時の補完
-- 削除済み投稿へのコメント拒否
-- 成功時の詳細反映と失敗時の入力保持
+This model covers:
+- anonymous comment defaulting
+- rejection of comments on deleted posts
+- reflection on detail after success and input preservation on failure
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct CommentState {

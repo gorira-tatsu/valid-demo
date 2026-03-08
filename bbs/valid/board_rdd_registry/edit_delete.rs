@@ -1,13 +1,13 @@
 /*
-対応する要件定義:
-- docs/rdd/00_前提とスコープ.md
-- docs/rdd/01_共通仕様.md
-- docs/rdd/05_投稿編集・削除機能.md
+Requirements covered:
+- docs/rdd/00_assumptions_and_scope.md
+- docs/rdd/01_common_specification.md
+- docs/rdd/05_post_edit_and_delete.md
 
-この model が担うこと:
-- 編集用キー一致時のみ更新/削除できること
-- 削除確認と論理削除
-- 削除後に一覧/詳細から非表示になること
+This model covers:
+- allowing update/delete only when the edit key matches
+- delete confirmation and logical deletion
+- invisibility from list/detail after deletion
 */
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, ValidState)]
 struct EditDeleteState {
