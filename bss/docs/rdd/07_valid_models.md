@@ -1,10 +1,10 @@
-# 07. valid モデル化
+# 07. valid Modeling
 
-## 目的
-- `docs/rdd` の要件を `valid` で検証可能な有限状態モデルへ写像する。
-- 画面文言や JSON 形式そのものではなく、業務ルールと遷移制約を invariant と transition に落とす。
+## Goal
+- Map the requirements in `docs/rdd` into finite-state models that can be verified with `valid`.
+- Focus not on literal UI strings or raw JSON structure by themselves, but on business rules and transition constraints expressed as invariants and transitions.
 
-## 配置
+## Location
 - registry: `valid/board_rdd_registry.rs`
 - exported models:
   - `board-common-spec`
@@ -21,132 +21,132 @@
   - `board-submission-discipline`
   - `board-message-contract`
 
-## モデル化方針
-- 文字列の実値ではなく、`title_len` `body_len` `edit_key_len` のような有限属性へ抽象化する。
-- 画面仕様は `screen` `phase` `empty_state_visible` `form_preserved` などの UI 事実に還元する。
-- API 仕様は `ApiStatus` を通じて `Ok` `BadRequest` `Forbidden` `NotFound` `ServerError` に正規化する。
-- 論理削除は `post_deleted` と `post_visible` の組み合わせで扱い、一覧・詳細からの非表示性を invariant で固定する。
+## Modeling Strategy
+- Abstract away from concrete strings into finite attributes such as `title_len`, `body_len`, and `edit_key_len`.
+- Reduce screen specifications to UI facts such as `screen`, `phase`, `empty_state_visible`, and `form_preserved`.
+- Normalize API behavior through `ApiStatus` into `Ok`, `BadRequest`, `Forbidden`, `NotFound`, and `ServerError`.
+- Represent logical deletion with combinations such as `post_deleted` and `post_visible`, then pin list/detail invisibility as invariants.
 
-## RDD との対応
+## Mapping To The RDD
 
-### `00_前提とスコープ.md`
-- 認証なし、編集用キーで本人確認:
+### `00_assumptions_and_scope.md`
+- No authentication, identity represented by edit key:
   - `CommonSpecModel`
   - `EditDeleteModel`
-- 削除済みデータを表示しない:
+- Do not show deleted data:
   - `PostListModel`
   - `PostDetailModel`
   - `EditDeleteModel`
 
-### `01_共通仕様.md`
-- 投稿/コメントの必須入力と文字数制約:
+### `01_common_specification.md`
+- Required post/comment input and length constraints:
   - `CommonSpecModel`
-- 匿名時の `名無しさん` 補完:
+- Anonymous-name defaulting:
   - `CommonSpecModel`
   - `PostCreateModel`
   - `CommentModel`
-- `updatedAt` の表示有無と更新成功時のみの反映:
+- `updatedAt` visibility and update-only-on-success behavior:
   - `PostDetailModel`
   - `BoardFlowModel`
-- `400 / 403 / 404 / 5xx` の使い分け:
+- Separation of `400 / 403 / 404 / 5xx` behavior:
   - `CommonSpecModel`
   - `EditDeleteModel`
   - `CommentModel`
-- JSON エラー応答の基本契約:
+- Base contract for JSON error responses:
   - `ApiContractModel`
-- HTML エスケープ前提:
+- HTML escaping assumptions:
   - `CommonSpecModel`
   - `PresentationContractModel`
-- 日時表示フォーマット、改行保持、再試行導線の配置:
+- Datetime format, newline preservation, and retry-message placement:
   - `PresentationContractModel`
   - `RetryUxModel`
-- API の JSON 応答構造:
+- JSON response structure for APIs:
   - `ApiContractModel`
-- `editKey` のハッシュ保存方針:
+- Hashed storage policy for `editKey`:
   - `EditKeyStorageModel`
 
-### `02_投稿一覧機能.md`
-- 20 件上限、空状態、詳細導線、新規投稿導線:
+### `02_post_list.md`
+- 20-item cap, empty state, detail navigation, and new-post navigation:
   - `PostListModel`
-- `page` `limit` 境界条件と不正値拒否:
+- `page` and `limit` boundary conditions plus invalid-value rejection:
   - `PostListModel`
-- 「新しい順 / 古い順」の timestamp 比較、120 文字抜粋、ページネーション or もっと見る:
+- Timestamp comparisons for newest/oldest sort, 120-character excerpts, pagination or load-more:
   - `ListRenderingModel`
-- 同一データ集合に対する安定順序:
+- Stable ordering for the same data set:
   - `ListRenderingModel`
-- 空状態文言:
+- Empty-state messaging:
   - `MessageContractModel`
 
-### `03_投稿作成機能.md`
-- 成功時の詳細遷移、失敗時の入力保持、送信中の多重送信防止:
+### `03_post_creation.md`
+- Success navigation to detail, input preservation on failure, and double-submit prevention while sending:
   - `PostCreateModel`
   - `SubmissionDisciplineModel`
 
-### `04_投稿詳細機能.md`
-- 未削除投稿のみ詳細表示、コメント空状態、古い順表示、更新日時表示:
+### `04_post_detail.md`
+- Detail visibility only for non-deleted posts, comment empty state, oldest-first comments, and updated-at display:
   - `PostDetailModel`
 
-### `05_投稿編集・削除機能.md`
-- 編集用キー一致時のみ更新/削除、削除確認、論理削除、削除後非表示:
+### `05_post_edit_and_delete.md`
+- Update/delete only when the edit key matches, delete confirmation, logical deletion, and invisibility after deletion:
   - `EditDeleteModel`
-- 編集用キー不一致メッセージ:
+- Incorrect edit-key message:
   - `MessageContractModel`
 
-### `06_コメント機能.md`
-- 削除済み投稿へのコメント拒否、成功時の詳細反映、失敗時の入力保持:
+### `06_comments.md`
+- Rejection of comments on deleted posts, reflection on success, and input preservation on failure:
   - `CommentModel`
-- コメント送信中の重複送信防止、失敗後再送規律:
+- Duplicate-submit prevention while sending comments and retry discipline after failure:
   - `SubmissionDisciplineModel`
 
-### `08_BBS成立要件.md`
-- 投稿作成から一覧、詳細、更新反映、コメント件数整合、削除後非表示、コメント拒否までの横断整合:
+### `08_bbs_acceptance_requirements.md`
+- Cross-feature consistency from post creation through list visibility, detail visibility, update reflection, comment-count consistency, invisibility after deletion, and comment rejection:
   - `BoardFlowModel`
-- 一覧再取得や詳細再取得を跨いだ整合維持:
+- Consistency across list reloads and detail reloads:
   - `BoardFlowModel`
-- 更新済み投稿の詳細取得失敗から retry 回復後に、`updatedAt` 表示とコメント件数整合を復元する横断整合:
+- Cross-feature recovery after a temporary detail-load failure on an updated post, restoring `updatedAt` visibility and comment-count consistency:
   - `BoardFlowModel`
-- 成功メッセージと retry banner の排他、失敗後再試行導線:
+- Mutual exclusion between success messages and retry banners, plus retry paths after failure:
   - `PresentationContractModel`
   - `RetryUxModel`
-- 作成/コメント送信中の重複送信防止と回復後の通常復帰:
+- Duplicate-submit prevention during post/comment creation and normal recovery afterward:
   - `SubmissionDisciplineModel`
 
-## 検証観点
-- 1 つの巨大モデルにせず、機能単位で分割して状態空間を抑える。
-- 各 model は章ごとの中核 invariant を持ち、`valid-registry` で個別に inspect / verify できる。
-- 実装時に追加したい仕様が増えたら、まず該当章の model に action と invariant を追加する。
+## Verification Approach
+- Avoid one huge model. Split by feature area to keep the state space manageable.
+- Each model carries core invariants for its chapter and can be inspected or verified independently through `valid-registry`.
+- When implementation introduces new requirements, first extend the corresponding chapter model with actions and invariants.
 
-## valid-registry 運用
-- binary 基準で検証するため、`valid/board_rdd_registry.rs` を更新したら先に `cargo build` する。
-- contract drift の基準は [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bss/valid/contract-lock.json) に固定する。
-- 運用手順は [docs/valid_registry_workflow.md](/Users/tatsuhiko/code/valid-demo/bss/docs/valid_registry_workflow.md) を参照する。
-- 最低限の確認順:
+## valid-registry Operation
+- Because verification is binary-based, run `cargo build` first whenever `valid/board_rdd_registry.rs` changes.
+- Fix the contract drift baseline to [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bss/valid/contract-lock.json).
+- See [docs/valid_registry_workflow.md](/Users/tatsuhiko/code/valid-demo/bss/docs/valid_registry_workflow.md) for the operating procedure.
+- Minimum review order:
   - `valid_contract_check`
   - `valid_inspect`
   - `valid_lint`
   - `valid_check`
   - `valid_coverage`
 
-## 今回追加した厳密化
+## Additional Precision Added In This Demo
 - `ListRenderingModel`
-  - `SortOrder` と先頭 2 件の `timestamp` 比較で、新しい順 / 古い順を不変条件として検証する。
-  - 本文抜粋は `body_len` と `excerpt_len` に圧縮し、120 文字超過時は `excerpt_ellipsized` を必須化する。
-  - 続きの UI は `ContinuationUi::Pagination | LoadMore` として差分を残す。
+  - Verify newest-first and oldest-first behavior as invariants using `SortOrder` and timestamp comparisons for the first two items.
+  - Compress excerpt behavior into `body_len` and `excerpt_len`, and require `excerpt_ellipsized` when the body exceeds 120 characters.
+  - Preserve UI variation through `ContinuationUi::Pagination | LoadMore`.
 - `RetryUxModel`
-  - 一覧の読み込み失敗は `TopBanner`、各フォーム送信失敗は `BelowForm` に固定する。
-  - 再試行は `ErrorShown -> Retrying -> Recovered` の回復遷移として検証する。
+  - Fix list-load failures to `TopBanner` and form-submission failures to `BelowForm`.
+  - Model retry as the recovery transition `ErrorShown -> Retrying -> Recovered`.
 - `MessageContractModel`
-  - 主要文言を `EmptyPostList / PostCreatedCompleted / InvalidEditKey` の有限集合に落とし、画面と結果コードに結び付ける。
+  - Reduce major messages to the finite set `EmptyPostList / PostCreatedCompleted / InvalidEditKey` and bind them to screens and result codes.
 - `PresentationContractModel`
-  - 日時表示 `YYYY-MM-DD HH:mm` を桁数と区切り文字数へ分解して検証する。
-  - 本文表示は `html_escaped` と `newline_preserved` の両立を要求する。
-  - 再試行導線は `RetryMessagePlacement::TopBanner | BelowForm` で位置を明示する。
-  - 投稿成功文言は `SuccessMessageKind::PostCreatedCompleted` に固定する。
+  - Verify `YYYY-MM-DD HH:mm` by decomposing it into digit counts and separator counts.
+  - Require body rendering to satisfy both `html_escaped` and `newline_preserved`.
+  - Make retry-message placement explicit through `RetryMessagePlacement::TopBanner | BelowForm`.
+  - Fix the successful post message to `SuccessMessageKind::PostCreatedCompleted`.
 - `BoardFlowModel`
-  - 更新済み投稿の詳細取得失敗を `RetryPhase::ErrorShown` に落とし、retry 可能かつ一覧へ戻れることを invariant にする。
-  - 回復後は `RetryPhase::Recovered` で、`updatedAt` 表示と一覧/詳細コメント件数整合が同時に復元されることを検証する。
+  - Model temporary detail-load failure on an updated post as `RetryPhase::ErrorShown`, requiring both retryability and a path back to the list.
+  - After recovery in `RetryPhase::Recovered`, verify that `updatedAt` visibility and list/detail comment-count consistency are restored together.
 - `ApiContractModel`
-  - `GET /posts` と `POST /posts` のレスポンスフィールド集合を invariant として固定する。
-  - エラー時も JSON 基本構造を維持する前提を API 契約として扱う。
+  - Fix the response field sets for `GET /posts` and `POST /posts` as invariants.
+  - Treat preservation of the basic JSON structure even on error as part of the API contract.
 - `EditKeyStorageModel`
-  - `editKey` 保存時に平文永続化しないこと、保存済みならハッシュ化されていることをポリシーとして固定する。
+  - Fix the policy that `editKey` must never be persisted in plaintext and must be hashed when stored.

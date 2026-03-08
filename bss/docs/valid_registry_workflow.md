@@ -1,31 +1,31 @@
 # valid-registry MCP Workflow
 
-## 目的
-- `valid/board_rdd_registry.rs` を一次ソースとして扱い、`valid-registry` MCP で contract drift と property 検証を再現可能にする。
-- 「ビルド済み binary が古い」「どの model / property を見るべきか不明」という運用ミスを減らす。
+## Goal
+- Treat `valid/board_rdd_registry.rs` as the source of truth and make contract drift checks and property verification reproducible through the `valid-registry` MCP flow.
+- Reduce common operational mistakes such as using a stale built binary or not knowing which model or property to inspect.
 
-## 前提
-- registry binary は `target/debug/bss-valid-models` を使う。
-- ソース変更後は必ず `cargo build` を先に実行する。MCP は Rust ソースではなく binary を読む。
-- 契約固定には [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bss/valid/contract-lock.json) を使う。
+## Assumptions
+- The registry binary is `target/debug/bss-valid-models`.
+- After changing the source, always run `cargo build` first. The MCP flow reads the built binary, not the Rust source files directly.
+- Use [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bss/valid/contract-lock.json) as the contract lock.
 
-## 最小手順
+## Minimal Procedure
 1. `cargo build`
 2. `target/debug/bss-valid-models contract check valid/contract-lock.json --json`
-3. model ごとに `inspect` と `lint`
-4. 確認対象の property を `check` で明示検証
-5. `coverage` で guard と transition の未到達を確認
+3. Run `inspect` and `lint` for each model
+4. Explicitly verify the properties you care about with `check`
+5. Use `coverage` to review uncovered guards and transitions
 
-## MCP で使う順番
+## Recommended MCP Call Order
 1. `valid_list_models`
 2. `valid_contract_check`
 3. `valid_inspect`
 4. `valid_lint`
 5. `valid_check`
 6. `valid_coverage`
-7. 必要なら `valid_explain` と `valid_testgen`
+7. Use `valid_explain` and `valid_testgen` when needed
 
-## 代表コマンド
+## Representative Commands
 ```sh
 cargo build
 ./target/debug/bss-valid-models contract check valid/contract-lock.json --json
@@ -36,39 +36,39 @@ cargo build
 cargo valid suite --json
 ```
 
-`./scripts/verify_valid_registry.sh` は以下をまとめて行う:
-- contract lock の drift check
-- 14 model すべての lint
-- 全 invariant の property check
-- coverage JSON の収集と gate fail の可視化
-- `board-flow` を含む suite 検証の前提整備
+`./scripts/verify_valid_registry.sh` bundles the following:
+- Drift checking for the contract lock
+- Linting for all 14 models
+- Property checks for all invariants
+- Collection of coverage JSON plus gate-failure visibility
+- Preparation for suite verification including `board-flow`
 
-`valid.toml` には MCP から直接回せる設定も置く:
-- `critical_properties`: 各 model の代表 invariant を 1 件ずつ
-- `property_suites.smoke`: 横断的に壊れやすい重要 property を少数束ねた確認用 suite
+`valid.toml` also contains settings that can be driven directly through MCP:
+- `critical_properties`: one representative invariant per model
+- `property_suites.smoke`: a compact cross-model suite of high-value properties that are easy to regress
 
-## 重点モデル
+## High-Value Models
 - `board-common-spec`
-  400/403/404/5xx、匿名補完、HTML エスケープの基底制約
+  Core constraints for 400/403/404/5xx behavior, anonymous defaults, and HTML escaping
 - `board-edit-delete`
-  編集キー一致、削除確認、論理削除後の非表示
+  Edit-key matching, delete confirmation, and invisibility after logical deletion
 - `board-list-rendering`
-  並び順、120 文字抜粋、継続 UI
+  Ordering, 120-character excerpts, and continuation UI
 - `board-retry-ux`
-  エラー表示位置と再試行回復
+  Error placement and retry recovery
 - `board-message-contract`
-  画面ごとの主要文言束縛
+  Binding important messages to the right screen contexts
 - `board-flow`
-  作成後の可視性、削除後の非表示、コメント拒否を横断的に確認
+  Cross-cutting verification of visibility after creation, invisibility after deletion, and comment rejection when unavailable
 
-## 運用ルール
-- property 名を推測しない。先に `inspect` で `property_details` を読む。
-- `solver_ready` を `lint` か `inspect` で確認する前に「形式検証済み」と言わない。
-- contract drift が出たら先に差分の妥当性をレビューし、問題なければ lock を更新する。
-- coverage fail は即バグとは限らないが、未到達 guard を放置したまま「検証十分」とは言わない。
+## Operating Rules
+- Do not guess property names. Read `property_details` through `inspect` first.
+- Do not claim something is "formally verified" before confirming `solver_ready` in `lint` or `inspect`.
+- If contract drift appears, review the diff first and update the lock only when the change is intentional.
+- A coverage failure is not automatically a bug, but uncovered guards should not be ignored while claiming verification is sufficient.
 
-## 現在の固定対象
-- exported models は 14 個:
+## Currently Exported Models
+- There are 14 exported models:
   - `board-common-spec`
   - `board-post-list`
   - `board-post-create`

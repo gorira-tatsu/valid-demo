@@ -1,141 +1,141 @@
 # BSS valid demo
 
-このディレクトリは、シンプルな掲示板アプリの要件定義を `valid` で形式化し、何が検証できるかを示すデモです。
+This directory is a demo that formalizes the requirements of a simple bulletin board application with `valid` and shows what kinds of guarantees can be checked.
 
-## このデモの目的
+## Purpose
 
-このデモは「valid を使って実装を検証する」より一段前の段階、つまり「要件定義の時点で何を機械的に確認できるか」を見せることを目的にしています。
+This demo focuses on a stage earlier than implementation verification. The goal is to show what can be checked mechanically during requirements definition itself.
 
-具体的には次の問いに答えるためのサンプルです。
+More concretely, this sample answers questions such as:
 
-- 仕様を state / action / property にどう分解するか
-- 画面仕様、API 契約、業務ルール、UX 制約を同じ土台で扱えるか
-- 正常系だけでなく、エラー系、境界値、削除後の不可視性、二重送信防止、メッセージ整合まで検証できるか
+- How should a requirement set be decomposed into `state`, `action`, and `property`?
+- Can screen behavior, API contracts, business rules, and UX constraints be handled on the same verification foundation?
+- Can the model cover not only happy paths, but also validation failures, boundary conditions, invisibility after deletion, double-submit prevention, and message consistency?
 
-## 先に読むファイル
+## Recommended Reading Order
 
 1. [`docs/rdd/README.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/README.md)
 2. [`docs/rdd/07_valid_models.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/07_valid_models.md)
-3. [`docs/rdd/08_BBS成立要件.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/08_BBS成立要件.md)
+3. [`docs/rdd/08_bbs_acceptance_requirements.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/08_bbs_acceptance_requirements.md)
 4. [`docs/valid_registry_workflow.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/valid_registry_workflow.md)
 
-## モデル構成
+## Model Inventory
 
-実際に公開されているモデルは 14 個です。
+There are 14 exported models.
 
 - `board-common-spec`
-  400/403/404/5xx、匿名補完、HTML エスケープなどの共通制約
+  Shared constraints such as 400/403/404/5xx behavior, anonymous-name defaulting, and HTML escaping
 - `board-post-list`
-  一覧取得、ページング、空状態、リンク導線
+  List retrieval, paging, empty states, and navigation links
 - `board-post-create`
-  投稿作成、入力異常、成功時遷移、送信中状態
+  Post creation, invalid input handling, success navigation, and submitting state
 - `board-post-detail`
-  詳細表示、未存在時の扱い、更新日時表示、コメント数
+  Detail rendering, not-found handling, updated-at visibility, and comment counts
 - `board-edit-delete`
-  編集キー、削除確認、削除後不可視
+  Edit key checks, delete confirmation, and invisibility after deletion
 - `board-comment`
-  コメント投稿、失敗時のフォーム保持、表示順
+  Comment submission, form preservation on failure, and ordering
 - `board-list-rendering`
-  新着順、古い順、120 文字抜粋、継続 UI
+  Newest/oldest ordering, 120-character excerpts, and continuation UI
 - `board-presentation-contract`
-  日時表示形式、本文レンダリング、成功 / 失敗メッセージ
+  Datetime formatting, body rendering, and success/failure messaging
 - `board-api-contract`
-  JSON 契約、成功 / 失敗レスポンス項目
+  JSON contracts and success/failure response fields
 - `board-edit-key-storage`
-  編集キーの保存方針
+  Edit key storage policy
 - `board-retry-ux`
-  リトライ導線、エラー表示位置、復帰時のメッセージ整理
+  Retry flow, error-message placement, and recovery cleanup
 - `board-submission-discipline`
-  二重送信防止と再試行可能性
+  Double-submit prevention and retryability
 - `board-message-contract`
-  主要文言がどの状態に束縛されるか
+  Which important messages are bound to which states
 - `board-flow`
-  一覧、詳細、編集、削除、コメントを横断した整合性
+  Cross-feature consistency across list, detail, edit, delete, and comment flows
 
-## valid で何ができるか
+## What `valid` Makes Visible
 
-このデモでは、要件定義をもとに少なくとも次の確認ができます。
+From the requirements alone, this demo lets you check at least the following:
 
 - `models`
-  どの要件領域が独立したモデルとして切り出されているか一覧できる
+  See which requirement areas were separated into independent models
 - `inspect`
-  state fields、actions、properties、read/write 情報を機械的に確認できる
+  Inspect state fields, actions, properties, and read/write metadata
 - `check`
-  要件を property として検証し、成立 / 不成立を判定できる
+  Verify a requirement as a property and determine whether it holds
 - `coverage`
-  遷移、guard、分岐の未到達を可視化できる
+  See which transitions, guards, and branches remain uncovered
 - `contract check`
-  model contract の drift を検知できる
+  Detect contract drift in exported model structure
 - `lint`
-  solver-ready か、説明や test generation に必要なメタデータが揃っているか確認できる
+  Check solver readiness and metadata quality for explanation and test generation
 - `explain`
-  property が壊れたときに、どの遷移と状態変化で破綻したか追跡できる
+  Trace which transition and state change caused a property to fail
 
-## 実行例
+## Example Commands
 
-前提:
+Prerequisites:
 
 - Rust toolchain
-- GitHub から `valid` 依存を取得できるネットワーク接続
+- Network access to fetch the pinned `valid` dependency from GitHub
 
-モデル一覧:
+List models:
 
 ```sh
 cargo run --bin bss-valid-models -- models
 ```
 
-共通仕様モデルの構造確認:
+Inspect the common specification model:
 
 ```sh
 cargo run --bin bss-valid-models -- inspect board-common-spec --json
 ```
 
-代表 property の検証:
+Check a representative property:
 
 ```sh
 cargo run --bin bss-valid-models -- check board-common-spec --property=P_COMMON_HTML_IS_ALWAYS_ESCAPED --json
 ```
 
-coverage の確認:
+Review coverage:
 
 ```sh
 cargo run --bin bss-valid-models -- coverage board-common-spec --json
 ```
 
-一括検証:
+Run the full verification script:
 
 ```sh
 ./scripts/verify_valid_registry.sh
 ```
 
-## 現在の検証状態
+## Current Verification Status
 
-2026-03-08 時点では、`./scripts/verify_valid_registry.sh` の全件通過はしていません。
+As of March 8, 2026, `./scripts/verify_valid_registry.sh` does not pass completely.
 
 - `board-post-list`
 - property: `P_LIST_EMPTY_STATE_MATCHES_VISIBLE_COUNT`
 
-到達反例では、ページ overflow 時に `visible_posts == 0` である一方 `empty_state_visible == false` となっており、一覧の空状態定義とページ overflow 表現の境界が未整理であることが分かります。
+The reachable counterexample shows a page-overflow case where `visible_posts == 0` while `empty_state_visible == false`. That means the boundary between "empty list state" and "page overflow state" is still underspecified.
 
-これは public repository としては「既知の仕様検討ポイント」として扱うのが自然です。README を読んだ第三者が誤解しないよう、成功例だけでなく現状の未解決点も明示しています。
+For a public demo repository, this is best treated as a known specification issue rather than hidden. The README states it explicitly so readers do not mistake the demo for a fully closed verification set.
 
-## 読みどころ
+## Suggested Focus Areas
 
-このデモで特に見る価値が高いのは次の点です。
+These parts are especially worth reviewing:
 
 - `board-common-spec`
-  仕様の最小単位をどう invariant にするか
+  How small shared rules become invariants
 - `board-list-rendering`
-  UI 表示ルールを単なる口頭説明ではなく検証可能な条件にする方法
+  How UI rendering rules become verifiable constraints instead of informal notes
 - `board-retry-ux`
-  UX 制約もモデル化できること
+  How UX constraints can be modeled explicitly
 - `board-message-contract`
-  文言も「どこで出るべきか」を契約化できること
+  How messages can be treated as contracts tied to state and result
 - `board-flow`
-  個別機能モデルを超えた整合性確認
+  Cross-feature consistency beyond individual screen-level models
 
-## 注意点
+## Notes
 
-このデモの `valid` 依存は GitHub の commit pin にしています。再現性は上がりますが、初回 build にはネットワーク接続が必要です。
+This demo pins `valid` to a specific GitHub commit. That improves reproducibility, but the first build still requires network access.
 
-また、このリポジトリ自体のライセンスはまだ未設定です。public repository として外部に公開する前に、利用条件を明示するライセンスファイルを追加することを推奨します。
+Also, this repository still has no license file. For a public repository, adding one would be the next sensible cleanup step.

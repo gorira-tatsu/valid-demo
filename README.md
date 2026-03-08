@@ -1,69 +1,69 @@
 # valid-demo
 
-`valid-demo` は、要件定義の段階で形式検証言語 `valid` を使うと何ができるかを理解するためのデモリポジトリです。
+`valid-demo` is a demo repository for understanding what becomes possible when you use the formal verification language `valid` during requirements definition.
 
-単なる仕様書置き場ではなく、要件を以下のような検証可能な形に落とし込む流れを確認できます。
+Instead of being only a place to store specification documents, this repository shows how to turn requirements into verifiable artifacts.
 
-- 仕様書を機能ごとに分割して整理する
-- 仕様から状態、操作、業務ルールを `valid` のモデルに落とす
-- 性質を property として明示し、自動で検査する
-- coverage や explain を使って、未到達分岐や仕様の穴を見つける
+- Organize specification documents by feature area
+- Translate requirements into `valid` models with states, actions, and business rules
+- Define expected properties explicitly and check them automatically
+- Use coverage and explain-style diagnostics to find unreachable branches and missing constraints
 
-現在のデモ対象は `bss` ディレクトリにあるシンプルな掲示板アプリです。
+The current demo target is a simple bulletin board application under the `bss` directory.
 
-## このリポジトリで分かること
+## What This Repository Shows
 
-- 要件定義を「画面仕様」だけで終わらせず、検証可能な制約へ変換するやり方
-- `valid` で state / action / property をどう切るか
-- 1 画面単位の仕様だけでなく、一覧 -> 作成 -> 詳細 -> 編集/削除 -> コメントのような横断フローも検証できること
-- 契約 drift、property 検証、coverage 確認をどの順番で回すと運用しやすいか
+- How to go beyond screen-level specs and turn requirements into verifiable constraints
+- How to split a problem into `state`, `action`, and `property` in `valid`
+- How to verify cross-feature flows such as list -> create -> detail -> edit/delete -> comment, not just isolated screens
+- How to operate contract drift checks, property verification, and coverage review in a practical order
 
-## リポジトリ構成
+## Repository Structure
 
 - [`bss/README.md`](/Users/tatsuhiko/code/valid-demo/bss/README.md)
-  掲示板デモの入口。最初に読む前提資料、モデル構成、実行コマンドをまとめています。
+  Entry point for the bulletin board demo, including the recommended reading order, model overview, and commands.
 - [`bss/docs/rdd/README.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/README.md)
-  要件定義ドキュメントの目次です。
+  Index of the requirements and design definition documents.
 - [`bss/docs/valid_registry_workflow.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/valid_registry_workflow.md)
-  `valid-registry` ベースの検証運用をまとめています。
+  Verification workflow notes for `valid-registry`.
 
-## デモの見方
+## How To Read The Demo
 
-1. RDD を読み、掲示板の要件を把握する
-2. `valid/board_rdd_registry.rs` と配下のモデルを見て、仕様がどのように state / action / property に落ちているか確認する
-3. `inspect`, `check`, `coverage` を実行して、仕様の見え方がどう変わるか確認する
-4. `board-flow` のような横断モデルを見て、機能単体では見えない整合性をどう扱うか確認する
+1. Read the RDD documents to understand the bulletin board requirements
+2. Inspect `valid/board_rdd_registry.rs` and the model files below it to see how the requirements were turned into `state`, `action`, and `property`
+3. Run `inspect`, `check`, and `coverage` to see how the specification becomes machine-readable
+4. Review cross-cutting models such as `board-flow` to understand how end-to-end consistency is expressed
 
-## 現在のデモ内容
+## Current Demo Scope
 
-`bss` には 14 個のモデルがあります。
+`bss` currently contains 14 models.
 
-- 共通仕様
-- 投稿一覧
-- 投稿作成
-- 投稿詳細
-- 投稿編集 / 削除
-- コメント
-- 一覧描画
-- 画面表示契約
-- API 契約
-- 編集キー保存
-- リトライ UX
-- 二重送信防止
-- 文言契約
-- 横断フロー
+- Common specification
+- Post list
+- Post creation
+- Post detail
+- Post edit / delete
+- Comments
+- List rendering
+- Presentation contract
+- API contract
+- Edit key storage
+- Retry UX
+- Submission discipline
+- Message contract
+- Cross-cutting board flow
 
-この構成により、正常系だけでなく次のような仕様も検証対象にできます。
+This structure makes it possible to verify more than just happy paths.
 
-- HTML エスケープやエラーコードの一貫性
-- 削除済み投稿の不可視性
-- 並び順や抜粋ルールの成立
-- UI 文言やエラーメッセージ配置の契約
-- 一覧と詳細の内容整合
-- リトライ後の回復挙動
+- Consistency of HTML escaping and error code behavior
+- Invisibility of deleted posts
+- Ordering and excerpt rules
+- Contracts for UI messages and error-message placement
+- Consistency between list and detail views
+- Recovery behavior after retry
 
-## 実行について
+## Running The Demo
 
-`bss` は `valid` を GitHub 上の commit pin で参照する形に変更しています。clone 後に Rust toolchain があれば、ローカルに `../../valid` を置かなくても依存解決できる前提です。
+`bss` depends on `valid` through a pinned GitHub revision. After cloning this repository, you should be able to resolve dependencies without placing a local `../../valid` checkout next to it, as long as you have a Rust toolchain.
 
-一方で、このリポジトリ自体のライセンスはまだ未設定です。public repository として公開する前に、配布条件を明示するライセンスファイルは追加した方がよい状態です。
+This repository itself still does not define a license. Before treating it as a polished public sample, adding a license file would be a good next step.
