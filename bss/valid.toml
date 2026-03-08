@@ -1,0 +1,24 @@
+registry = "src/bin/board_registry.rs"
+default_backend = "explicit"
+suite_models = ["board-common-spec", "board-post-list", "board-post-create", "board-post-detail", "board-edit-delete", "board-comment", "board-list-rendering", "board-presentation-contract", "board-api-contract", "board-edit-key-storage", "board-retry-ux", "board-submission-discipline", "board-message-contract", "board-flow"]
+generated_tests_dir = "generated-tests"
+artifacts_dir = "artifacts"
+
+[critical_properties]
+board-common-spec = ["P_COMMON_HTML_IS_ALWAYS_ESCAPED"]
+board-post-list = ["P_LIST_PAGE_SIZE_IS_CAPPED_AT_20"]
+board-post-create = ["P_CREATE_SUCCESS_NAVIGATES_TO_DETAIL"]
+board-post-detail = ["P_DETAIL_NOT_FOUND_WHEN_POST_IS_UNAVAILABLE"]
+board-edit-delete = ["P_DELETE_HIDES_POST_FROM_VIEWS"]
+board-comment = ["P_COMMENT_SUCCESS_REFLECTS_ON_DETAIL"]
+board-list-rendering = ["P_LIST_NEWEST_ORDER_IS_TIMESTAMP_DESCENDING"]
+board-presentation-contract = ["P_PRESENTATION_BODY_RENDERING_ESCAPES_HTML_AND_PRESERVES_NEWLINES"]
+board-api-contract = ["P_API_RESPONSES_ARE_JSON"]
+board-edit-key-storage = ["P_EDIT_KEY_STORAGE_NEVER_PERSISTS_PLAINTEXT"]
+board-retry-ux = ["P_RETRY_ERROR_STATE_IS_ACTIONABLE"]
+board-submission-discipline = ["P_SUBMIT_IN_FLIGHT_DISALLOWS_SECOND_SUBMIT"]
+board-message-contract = ["P_MESSAGE_INVALID_EDIT_KEY_IS_BOUND_TO_FORBIDDEN_EDIT"]
+board-flow = ["P_FLOW_DETAIL_RECOVERY_RESTORES_UPDATED_AND_COMMENT_CONSISTENCY"]
+
+[property_suites.smoke]
+entries = [{ model = "board-common-spec", properties = ["P_COMMON_HTML_IS_ALWAYS_ESCAPED", "P_COMMON_BAD_REQUEST_HIDES_INVALID_RESOURCE"] }, { model = "board-post-list", properties = ["P_LIST_INVALID_PAGE_REQUEST_RETURNS_BAD_REQUEST", "P_LIST_PAGE_OVERFLOW_RETURNS_EMPTY_RESULT"] }, { model = "board-post-create", properties = ["P_CREATE_SUCCESS_NAVIGATES_TO_DETAIL", "P_CREATE_FAILURE_PRESERVES_FORM"] }, { model = "board-post-detail", properties = ["P_DETAIL_UPDATED_POST_SHOWS_UPDATED_AT", "P_DETAIL_UNUPDATED_POST_HIDES_UPDATED_AT"] }, { model = "board-edit-delete", properties = ["P_DELETE_HIDES_POST_FROM_VIEWS"] }, { model = "board-edit-key-storage", properties = ["P_EDIT_KEY_STORAGE_NEVER_PERSISTS_PLAINTEXT"] }, { model = "board-retry-ux", properties = ["P_RETRY_ERROR_STATE_IS_ACTIONABLE", "P_RETRY_RECOVERY_CLEARS_ERROR_MESSAGE"] }, { model = "board-api-contract", properties = ["P_API_ERROR_RESPONSES_EXPOSE_MESSAGE", "P_API_BAD_REQUEST_RESPONSES_EXPOSE_FIELD_ERRORS"] }, { model = "board-flow", properties = ["P_FLOW_DELETED_POST_IS_HIDDEN_FROM_DETAIL", "P_FLOW_DETAIL_RECOVERY_RESTORES_UPDATED_AND_COMMENT_CONSISTENCY"] }]

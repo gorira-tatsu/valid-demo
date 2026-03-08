@@ -1,0 +1,9 @@
+[package]
+name = "bss-valid-models"
+version = "0.1.0"
+edition = "2021"
+description = "A public demo showing how to model and verify requirements with valid."
+readme = "README.md"
+
+[dependencies]
+valid = { git = "https://github.com/gorira-tatsu/valid", rev = "ef02a07fe642e98ea30ca17ad19a6426b98839a7" }
