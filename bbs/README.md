@@ -1,4 +1,4 @@
-# BSS valid demo
+# BBS valid demo
 
 This directory is a demo that formalizes the requirements of a simple bulletin board application with [`valid`](https://github.com/gorira-tatsu/valid) and shows what kinds of guarantees can be checked.
 
@@ -6,10 +6,10 @@ This directory is a demo that formalizes the requirements of a simple bulletin b
 
 ## Recommended Reading Order
 
-1. [`docs/rdd/README.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/README.md)
-2. [`docs/rdd/07_valid_models.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/07_valid_models.md)
-3. [`docs/rdd/08_bbs_acceptance_requirements.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/rdd/08_bbs_acceptance_requirements.md)
-4. [`docs/valid_registry_workflow.md`](/Users/tatsuhiko/code/valid-demo/bss/docs/valid_registry_workflow.md)
+1. [`docs/rdd/README.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/rdd/README.md)
+2. [`docs/rdd/07_valid_models.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/rdd/07_valid_models.md)
+3. [`docs/rdd/08_bbs_acceptance_requirements.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/rdd/08_bbs_acceptance_requirements.md)
+4. [`docs/valid_registry_workflow.md`](/Users/tatsuhiko/code/valid-demo/bbs/docs/valid_registry_workflow.md)
 
 ## Model Inventory
 
@@ -71,25 +71,25 @@ Prerequisites:
 List models:
 
 ```sh
-cargo run --bin bss-valid-models -- models
+cargo run --bin bbs-valid-models -- models
 ```
 
 Inspect the common specification model:
 
 ```sh
-cargo run --bin bss-valid-models -- inspect board-common-spec --json
+cargo run --bin bbs-valid-models -- inspect board-common-spec --json
 ```
 
 Check a representative property:
 
 ```sh
-cargo run --bin bss-valid-models -- check board-common-spec --property=P_COMMON_HTML_IS_ALWAYS_ESCAPED --json
+cargo run --bin bbs-valid-models -- check board-common-spec --property=P_COMMON_HTML_IS_ALWAYS_ESCAPED --json
 ```
 
 Review coverage:
 
 ```sh
-cargo run --bin bss-valid-models -- coverage board-common-spec --json
+cargo run --bin bbs-valid-models -- coverage board-common-spec --json
 ```
 
 Run the full verification script:

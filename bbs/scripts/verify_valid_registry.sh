@@ -2,9 +2,9 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BIN_PATH="$ROOT_DIR/target/debug/bss-valid-models"
+BIN_PATH="$ROOT_DIR/target/debug/bbs-valid-models"
 LOCK_FILE="$ROOT_DIR/valid/contract-lock.json"
-OUTPUT_DIR="${1:-/tmp/bss-valid-registry}"
+OUTPUT_DIR="${1:-/tmp/bbs-valid-registry}"
 
 mkdir -p "$OUTPUT_DIR"
 

@@ -5,13 +5,13 @@
 - Avoid stale binaries and unclear model/property selection.
 
 ## Assumptions
-- The registry binary is `target/debug/bss-valid-models`.
+- The registry binary is `target/debug/bbs-valid-models`.
 - After changing the source, always run `cargo build` first. The MCP flow reads the built binary, not the Rust source files directly.
-- Use [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bss/valid/contract-lock.json) as the contract lock.
+- Use [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bbs/valid/contract-lock.json) as the contract lock.
 
 ## Minimal Procedure
 1. `cargo build`
-2. `target/debug/bss-valid-models contract check valid/contract-lock.json --json`
+2. `target/debug/bbs-valid-models contract check valid/contract-lock.json --json`
 3. Run `inspect` and `lint` for each model
 4. Explicitly verify the properties you care about with `check`
 5. Use `coverage` to review uncovered guards and transitions
@@ -28,10 +28,10 @@
 ## Representative Commands
 ```sh
 cargo build
-./target/debug/bss-valid-models contract check valid/contract-lock.json --json
-./target/debug/bss-valid-models inspect board-common-spec --json
-./target/debug/bss-valid-models check board-common-spec --property=P_COMMON_BAD_REQUEST_HIDES_INVALID_RESOURCE --json
-./target/debug/bss-valid-models coverage board-common-spec --json
+./target/debug/bbs-valid-models contract check valid/contract-lock.json --json
+./target/debug/bbs-valid-models inspect board-common-spec --json
+./target/debug/bbs-valid-models check board-common-spec --property=P_COMMON_BAD_REQUEST_HIDES_INVALID_RESOURCE --json
+./target/debug/bbs-valid-models coverage board-common-spec --json
 ./scripts/verify_valid_registry.sh
 cargo valid suite --json
 ```

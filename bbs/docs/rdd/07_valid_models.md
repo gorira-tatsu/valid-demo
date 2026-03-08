@@ -118,8 +118,8 @@
 
 ## valid-registry Operation
 - Because verification is binary-based, run `cargo build` first whenever `valid/board_rdd_registry.rs` changes.
-- Fix the contract drift baseline to [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bss/valid/contract-lock.json).
-- See [docs/valid_registry_workflow.md](/Users/tatsuhiko/code/valid-demo/bss/docs/valid_registry_workflow.md) for the operating procedure.
+- Fix the contract drift baseline to [valid/contract-lock.json](/Users/tatsuhiko/code/valid-demo/bbs/valid/contract-lock.json).
+- See [docs/valid_registry_workflow.md](/Users/tatsuhiko/code/valid-demo/bbs/docs/valid_registry_workflow.md) for the operating procedure.
 - Minimum review order:
   - `valid_contract_check`
   - `valid_inspect`

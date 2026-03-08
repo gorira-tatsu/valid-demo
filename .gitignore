@@ -6,4 +6,4 @@
 **/*.tmp
 **/.idea/
 **/.vscode/
-bss/generated-tests/
+bbs/generated-tests/

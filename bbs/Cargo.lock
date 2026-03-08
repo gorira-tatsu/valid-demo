@@ -62,7 +62,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "bss-valid-models"
+name = "bbs-valid-models"
 version = "0.1.0"
 dependencies = [
  "valid",
